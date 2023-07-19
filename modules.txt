@@ -1,0 +1,234 @@
+1------------------Datetime module
+from datetime import datetime,timedelta
+##import datetime ## hepsine ulaşır.
+##Zaman ve tarih ile alakalı bir işlem yapıcaksak bunu kullanıyoruz.
+## from datetime import date
+## from datetime import time
+simdi=datetime.today()
+result=datetime.now()##şimdiki zaman
+result=datetime.now().today()
+result=datetime.now().year
+result=datetime.now().month
+result=datetime.now().year
+result=datetime.now().minute
+result=datetime.now().second
+result=datetime.ctime(simdi) ## daha düzenli gösteriyor.
+## ilgili zamandan bilgiyi istediğimiz şekilde almayı sağlar.
+## Datetime python şeklinde aratın bulun.
+result=datetime.strftime(simdi,'%B')
+result=datetime.strftime(simdi,'%A')
+result=datetime.strftime(simdi,'%X')
+result=datetime.strftime(simdi,'%Y %B %A')
+##String ifadeyi çözümleme.
+t='21 April 2019 hour 10:12:30'
+dt=datetime.strptime(t,'%d %B %Y hour %H:%M:%S')
+year=dt.year
+print(dt)
+print(year)
+##objeyi kendimiz oluşturma
+birthday=datetime(1983,5,9,12,30,10)
+## saniye cinsinden verir
+result=datetime.timestamp(birthday)
+print(result)
+## second to date
+result=datetime.fromtimestamp(result)
+print(result)
+##1970 OCAK 1 BİLGİSAYARLAR İCİN BİR MİLAT
+##TARİH 1970TEN BAŞLAR.
+## iki tarih arasındaki fark
+result=simdi-birthday ##time delta
+result=result.days
+result=simdi+timedelta(days=366)
+print(result)
+2-----------------------------------------OS module
+import os
+## işletim sistemi ile iligili bir bilgi sunar genel olarak.
+## klasörler hakkında bilgi sahibi olmak 
+##dosya işlemlerinde vs yardımcı oluruz.
+
+result=dir(os)
+result=os.name ## işletim sistemini söyler. nt windows
+result=os.getcwd() ## python dosyasının konumunu gösetrir.
+##klasör oluşturma
+##os.mkdir("newdirectory")
+##dizin değiştirme
+##os.chdir("C:\\")
+##os.chdir("..") bir üst dizine geçeriz.
+#result=os.getcwd()
+#os.makedirs("newdirectoryy/newklasör")
+## dosya listeleme
+"""result=os.listdir()
+result=os.listdir('C:\\')
+for dosya in os.listdir():
+    if dosya.endswith('.py'):
+        print(dosya)"""
+
+## Dosya hakkında bilgi sahibi olma
+res=os.stat("nested.py")
+print(res.st_ctime)
+## isim değişirme
+##os.rename('newdirectory')
+## klasör silme
+## os.rmdir("newdirectory")
+##os.removedirs("newdirectory/newdirectories") alt dizinler için
+##  path
+res=os.path.abspath("nested.py")
+print(res)
+## dosya var mı yokmu
+result=os.path.exists("os.py")
+##klasör mü
+result=os.path.isdir("C........")
+3---------------------REGULAR EXPRESSİN module
+import re
+print(dir(re))
+# regular expression 
+# re module ile armaa işlemi
+
+# re module
+str="Python Kursu: Python Programlama Rehberiniz | 40 saat"
+
+# re.findall()
+"""result=re.findall("Python",str)
+print(result)"""
+
+#re.split()
+"""result=re.split(" ",str)
+print(result)"""
+
+# re.sub()
+"""result=re.sub(" ","-",str)
+print(result)"""
+
+#re.search()
+res=re.search("Python",str)
+##konumu için re.span()
+## res.start() başlangıç karakteri
+## res.end() son karakter
+
+## REGULAR EXPRESSİON
+!!--[] arasina yazilan bütün karakterler aranır.
+[abc]=> a: 1 match
+        ac:2 match 
+        Python: No match
+
+[a-e]=>[abcde]
+[1-5]=>[12345]
+[0-39]=>[01239]
+[^abc]=>abc disindakiler
+[^0-9]=>rakam olmayan karakterler
+
+result=re.findall("[abc]",str)
+result=re.findall("[a-z]",str)
+result=re.findall("[1-5]",str)
+
+!!-- (.)
+#Herhangi bir karakteri ifade eder.
+    .. => a:No match
+         aa:1 match
+         abc: 1 match
+         abcd:2 match
+
+result=re.findall("...",str) # 3basamaklı her şey
+
+!!-- (^) Belirtilen karakterle başlıyor mu ?
+    ^a a: 1 match
+      abc: 1 match
+      bac: no match
+result=re.findall("^a",str)
+
+!!-- ($) Belirtilen karakterle bitiyor mu ?
+    a$ a: 1 match
+      lamba: 1 match
+      erencan: no match
+result=re.findall("t$",str)
+
+!!-- (*) Bir karakterin sifir ya da daha fazla sayıda olmasını kontrol eder.
+    ma*n => mn : 1 match
+            man :1 match
+            maaan:1 match
+            main: No match a'nın arkasına n gelmiyor.
+result=re.findall("sa*t",str)
+
+
+--!! (?) Bir karakterin sıfır ya da bir kez olmasını kontrol eder.
+ma?n=>mn:no match
+      man:1 match
+      maaan:no match
+      main:no match(a'nın arkasına n gelmiyor.)
+
+--!!({})-Karakter sayisini kontrol eder
+    al{2}=> a karakterinin arkasına l karakteri 2 kez tekrarlamalı
+    al{2,3} a karakterinin arkasına l karakteri en az 2 kez en fazla 3 tekrarlamalı
+    [0-9]{2,4}en az 2 en cok 4 basamakli sayilar
+
+--!! (|) alternatif seçeneklerden birinin gerçekleşmesi gerekir.
+
+    a|b => a ya da b
+    cde => no match
+    ade=> 1 match
+    acdbea=> 3 match
+
+--!! () gruplama için kullanılır.
+    (a|b|c)xz=> a,b,c karakterlerinin arkasına xz gelmelidir.
+
+--!! \ Özel karakter arammaızı sağlar.
+    \$a => $ karakterinin arkasına a karakterini arar.Yani #$ regular exp. engine tarafından yorumlanmaz.
+--!! \A Belirtilen karakter string başında mı
+--!! \Z Belirtilen karakter string sonunda mı
+--!! \b başında mı sonunda mı
+--!! \B
+
+4----------------------------JSON MODULE
+## ortak bir veri taşıma objesi diyebilriiz json içisin.
+
+# dict jsona benzer bir yapıdır.
+
+person={"name":"Ali","language":"["python","c"]}
+person['name']
+person['languages']
+person['languages'][0]
+
+import json
+
+
+## json hal string şekildedir.
+## bu stringi isteiğimiz dictionary yapıya döndürmeye çalıcaşağız.
+
+person='{"name":"Ali", "language":["python","c"]}'
+
+## JSON string to Dict
+'''result=json.loads(person)
+print(type(result)) ## -> dictionary
+print(result)'''
+
+##json dosya okuma
+"""with open("person.json") as file:
+  data=json.load(file)
+  print(data)"""
+## dict to json string oluyor.
+person_dict={"name":"Ali","languages":["Pyt","Java"]}
+result=json.dumps(person_dict)
+print(type(result))
+print(result)
+
+## dosyaya kaydet
+with open ("person.json","w") as f:
+  json.dump(person_dict,f)
+
+
+person_dict=json.loads(person)
+result=json.dumps(person_dict,indent=4,sort_keys=True)
+print(result)
+
+
+
+
+
+
+
+
+
+
+
+
+
